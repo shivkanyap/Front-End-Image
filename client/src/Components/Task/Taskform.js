@@ -98,8 +98,11 @@ class Taskform extends React.Component{
                             <Col sm={10}>
                                 <Input name="assignedTo" type="select" value={this.state.assignedTo} onChange={this.handleChange} className="form-control">
                                         <option value="" >Select</option>
-                                        <option value={this.state.assignedTo._id} >{this.state.assignedTo.username}</option>
-                                    </Input>
+                                        {this.state.userslist.map((item)=>{
+                                            console.log(item)
+                                            return <option key={item.id}>{item.name}</option>
+                                         })}
+                                 </Input>
                             </Col>
                         </FormGroup>
                         </div>
@@ -148,7 +151,10 @@ class Taskform extends React.Component{
                             <Col sm={10}>
                                 <Input name="assignedTo" type="select" value={this.state.assignedTo} onChange={this.handleChange} className="form-control">
                                         <option value="" >Select</option>
-                                        <option value={this.state.assignedTo._id} >{this.state.assignedTo.username}</option>
+                                        {this.state.userslist.map((item)=>{
+
+                                        return <option key={item.id}>{item.name}</option>
+                                        })}
                                     </Input>
                             </Col>
                         </FormGroup>

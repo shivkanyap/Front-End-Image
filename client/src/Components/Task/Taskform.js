@@ -12,7 +12,7 @@ class Taskform extends React.Component{
             receipt:'',
             rating:'',
             userslist:[],
-            receiptImg:'',
+            receiptImg:null,
             role:'',
             isLoaded:false,
             loggedInUser:{}
@@ -39,11 +39,14 @@ class Taskform extends React.Component{
         })
 
         .then((response)=>{
+            console.log(response.data,'in data ul')
             this.setState(()=>({
                 userslist:response.data
+            
               
             }))
         })
+        console.log(this.state.userslist,'test')
     }
 
     handleSubmit=(e)=>{
@@ -53,12 +56,28 @@ class Taskform extends React.Component{
             assignedTo:this.state.assignedTo,
             
         }
+        // const formData_ = new FormData()
+        // formData.append(
+        //     "myFile",
+        //     this.state.receiptImg,
+        //     // this.state.receiptImg.name
+        // )
+        // console.log(this.state.receiptImg)
+        axios.post(`http://localhost:3005/taskform/create`,formData,{
+            headers:{
+                'x-auth':localStorage.getItem('token')
+            }
+        })
+        .then(response=>{
+            console.log(response.data)
+        })
         // const formData=new FormData()
         // formData.append('receipt',this.state.receipt?this.state.receipt:this.state.receiptImg)
         // this.handleSubmit(formData)
     }
     handleChange=(e)=>{
         e.persist()
+        console.log(e.target.value,'ing')
         this.setState(()=>({
           [e.target.name] : e.target.value   
         }))
@@ -69,7 +88,21 @@ class Taskform extends React.Component{
             receipt:e.target.files[0]
         }))
     }
-    render(){
+    onFileUpload=()=>{
+        console.log('clicked')
+        const formData_ = new FormData()
+        formData_.append(
+            "myFile",
+            this.state.receiptImg,
+            // this.state.receiptImg.name
+        )
+        console.log(this.state.receiptImg)
+        this.handleSubmit()
+
+    }
+       
+
+    render(){console.log(this.state.userslist,'inn rr')
         return(
             <fieldset>
                 <h2 className="formheader">Form</h2>
@@ -92,15 +125,16 @@ class Taskform extends React.Component{
                         </div>
                         <div>
                         <FormGroup row>
-                            <Label sm={2}className="headerlabel">
+                            <Label sm={2} className="headerlabel">
                                 assignedTo : <br/><span className="bracketsize">(assigned to)</span>
                             </Label>
                             <Col sm={10}>
                                 <Input name="assignedTo" type="select" value={this.state.assignedTo} onChange={this.handleChange} className="form-control">
                                         <option value="" >Select</option>
+                                        {console.log(this.state.userslist,'in a')}
                                         {this.state.userslist.map((item)=>{
                                             console.log(item)
-                                            return <option key={item.id}>{item.name}</option>
+                                            return <option key={item._id} value={item.username} >{item.username}</option>
                                          })}
                                  </Input>
                             </Col>
@@ -153,7 +187,7 @@ class Taskform extends React.Component{
                                         <option value="" >Select</option>
                                         {this.state.userslist.map((item)=>{
 
-                                        return <option key={item.id}>{item.name}</option>
+                                        return <option key={item._id}>{item.username}</option>
                                         })}
                                     </Input>
                             </Col>
@@ -166,7 +200,7 @@ class Taskform extends React.Component{
                                 Receipt: <br/><span className="bracketsize">()</span>
                             </Label>
                             <Col sm={10}>
-                                <Input name="receipt" type="file" value={this.state.receipt} onChange={this.handlefileChange} className="form-control">
+                                <Input name="receipt" type="file" value={this.state.receipt} onChange={this.handlefileChange} onClick={this.onFileUpload}  className="form-control">
                                         {this.state.receiptImg!=='null'?<img src={`uploads/${this.state.receiptImg}`}alt={`${this.state.receiptImg}`}/>:''}
                                     </Input>
                             </Col>

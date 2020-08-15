@@ -3,7 +3,7 @@ import {BrowserRouter,Link,Route,Switch} from 'react-router-dom';
 import Register from './Components/User/Register';
 import Login from './Components/User/Login';
 import Taskform  from './Components/Task/Taskform'
-
+import ForView from './Components/Task/view'
 import axios from 'axios';
 
 
@@ -50,6 +50,7 @@ class App extends React.Component{
                    
                     <li className="nav-item ml-4"><Link to="/users/logout" >Logout</Link></li>
                     <li className="nav-item ml-4"><Link to="/taskform/create">Create </Link></li>
+                    <li className="nav-item ml-4"><Link to="/taskform/view">View Task</Link></li>
                   </div>
                   // </div>
 
@@ -70,6 +71,7 @@ class App extends React.Component{
           }} />
           
           <Route path="/taskform/create" component={Taskform}/>
+          <Route path="/taskform/view" component={ForView}/>
           
           <Route path="/users/logout" render={(props) => {
               axios.delete('http://localhost:3005/users/logout', {
